@@ -1,3 +1,4 @@
+
 name: Build Android APK
 on: push
 jobs:
@@ -6,19 +7,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       
-      - name: Setup Godot 3.5.3
-        uses: chickensoft-games/setup-godot@v1
+      - name: Setup Godot
+        uses: firebelley/godot-export@v5
         with:
-          godot-version: 3.5.3
-          export-templates-version: 3.5.3
-      
-      - name: Export APK
-        run: |
-          mkdir -p build
-          godot --headless --export-debug "Android" build/cadenas-rotas.apk
-      
-      - name: Upload APK
-        uses: actions/upload-artifact@v4
-        with:
-          name: cadenas-rotas-apk
-          path: build/cadenas-rotas.apk
+          godot_version: 3.5.3
+          godot_download_url: https://github.com/godotengine/godot/releases/download/3.5.3-stable/Godot_v3.5.3-stable_linux_headless.64.zip
+          templates_download_url: https://github.com/godotengine/godot/releases/download/3.5.3-stable/Godot_v3.5.3-stable_export_templates.tpz
+          base_path: .
+          relative_project_path: ./
+          export_debug: true
+          presets: Android
+          artifact_name: cadenas-rotas-apk
+          export_path: build/cadenas-rotas.apk
