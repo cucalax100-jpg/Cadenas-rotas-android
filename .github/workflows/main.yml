@@ -1,4 +1,3 @@
-
 name: Build Android APK
 on: push
 jobs:
@@ -7,15 +6,30 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       
-      - name: Setup Godot
-        uses: firebelley/godot-export@v5
+      - name: Install dependencies
+        run: sudo apt-get update && sudo apt-get install -y unzip wget
+      
+      - name: Download Godot 3.5.3 Headless
+        run: |
+          wget https://github.com/godotengine/godot/releases/download/3.5.3-stable/Godot_v3.5.3-stable_linux_headless.64.zip
+          unzip Godot_v3.5.3-stable_linux_headless.64.zip
+          mv Godot_v3.5.3-stable_linux_headless.64 godot
+          chmod +x godot
+      
+      - name: Download Export Templates 3.5.3
+        run: |
+          wget https://github.com/godotengine/godot/releases/download/3.5.3-stable/Godot_v3.5.3-stable_export_templates.tpz
+          mkdir -p ~/.local/share/godot/templates/3.5.3.stable
+          unzip Godot_v3.5.3-stable_export_templates.tpz
+          mv templates/* ~/.local/share/godot/templates/3.5.3.stable/
+      
+      - name: Export APK Debug
+        run: |
+          mkdir -p build
+          ./godot --headless --export-debug "Android" build/cadenas-rotas.apk
+      
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
         with:
-          godot_version: 3.5.3
-          godot_download_url: https://github.com/godotengine/godot/releases/download/3.5.3-stable/Godot_v3.5.3-stable_linux_headless.64.zip
-          templates_download_url: https://github.com/godotengine/godot/releases/download/3.5.3-stable/Godot_v3.5.3-stable_export_templates.tpz
-          base_path: .
-          relative_project_path: ./
-          export_debug: true
-          presets: Android
-          artifact_name: cadenas-rotas-apk
-          export_path: build/cadenas-rotas.apk
+          name: cadenas-rotas-apk
+          path: build/cadenas-rotas.apk
