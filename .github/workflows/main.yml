@@ -13,10 +13,12 @@ jobs:
         export-templates-version: 3.5.3
         
     - name: Export APK
-      run: godot --headless --export "Android" cadenas-rotas.apk
+      run: |
+        mkdir -p build
+        godot --headless --export-debug "Android" build/cadenas-rotas.apk
         
     - name: Upload APK
       uses: actions/upload-artifact@v4
       with:
         name: cadenas-rotas-apk
-        path: cadenas-rotas.apk
+        path: build/cadenas-rotas.apk
