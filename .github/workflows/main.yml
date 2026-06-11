@@ -7,10 +7,10 @@ jobs:
     - uses: actions/checkout@v4
     
     - name: Setup Godot 3.5.3
-      uses: pbar1/setup-godot@v1.0.2
-      with:
-        godot-version: 3.5.3
-        export-templates-version: 3.5.3
+  uses: chickensoft-games/setup-godot@v1
+  with:
+    godot-version: 3.5.3
+    export-templates-version: 3.5.3
         
     - name: Export APK
       run: |
